@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import 'font-awesome/css/font-awesome.min.css';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
 import logo from './logo.svg';
 import './App.css';
-import Login from './login/Login';
+import LoginControll from './login/LoginControll';
 import Header from './header/Header';
 import Form from 'react-bootstrap';
 
@@ -33,28 +31,35 @@ class App extends Component {
     this.setState({user: null})
   }
 
-  render() {
-if (this.state.user) {
-  console.log("User: " + this.state.user.username);
+  register(username, password) {
+    // call api for adding new user
 
-}
+    this.signIn(username, password);
+    console.log("Registriert");
+  }
+
+  render() {
+
     return (
       <MuiThemeProvider>
-      <div className="App">
-      <Header user={this.state.user} onSignOut={this.signOut.bind(this)} />
-      {
-        (this.state.user) ?
-        // if user show dashboard
-        <h2>Dashboard</h2>
+        <div className="App">
+        <Header user={this.state.user} onSignOut={this.signOut.bind(this)} />
 
-        :
-        // if no user - login
-        <Login onSignIn={this.signIn.bind(this)} />
-      }
-      </div>
+        {
+          (this.state.user) ?
+          // if user show dashboard
+          <h2>Dashboard</h2>
+
+          :
+          // if no user - login
+          <LoginControll onSignIn={this.signIn.bind(this)} onRegistration={this.register.bind(this)} />
+
+        }
+        </div>
       </MuiThemeProvider>
     );
   }
 }
+
 
 export default App;

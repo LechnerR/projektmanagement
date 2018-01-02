@@ -1,16 +1,9 @@
 import React, { Component } from 'react';
-import './Login.css';
+import './Forms.css';
 import Input from 'react-bootstrap';
 import Button from 'react-bootstrap';
 
-class Login extends Component {
-
-  constructor(props) {
-    super(props);
-    // this.handleSignIn = this.handleSignIn.bind(this);
-    // this.handleChange = this.handleChange.bind(this);
-    // this.handleSubmit = this.handleSubmit.bind(this);
-  }
+class LoginForm extends Component {
 
   handleSignIn(e) {
     e.preventDefault();
@@ -21,14 +14,14 @@ class Login extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSignIn.bind(this)}>
-        <h3 className="User">Login </h3>
+      <form className="Login" onSubmit={this.handleSignIn.bind(this)}>
         <input className="Input" type="text" ref="username" placeholder="Benutzername" required/><br />
         <input className="Input" type="password" ref="password" placeholder="Passwort" required/><br />
         <button className="Button" type="submit" label="Login">Login</button>
+        <div className="Register">Noch nicht registriert?</div>
+        <button className="Button" type="button" label="Registrieren" onClick={this.props.onClick}>Jetzt registrieren</button>
       </form>
     );
   }
 }
-
-export default Login;
+export default LoginForm;
