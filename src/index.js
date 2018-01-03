@@ -11,6 +11,7 @@ import App from './App';
 import Dashboard from './dashboard/Dashboard.js';
 import registerServiceWorker from './registerServiceWorker';
 
+
 const Root = () => {
   return (
     <BrowserRouter>
@@ -18,7 +19,7 @@ const Root = () => {
         <Switch>
           <Route exact path='/' component={App}/>
           // just for testing
-          <Route exact path='/login' component={Dashboard}/>
+          <Route exact path='/dashboard' component={Dashboard}/>
         </Switch>
       </div>
     </BrowserRouter>

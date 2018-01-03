@@ -18,13 +18,17 @@ class LoginControll extends Component {
     this.setState({isRegistered: false});
   }
 
+  goBack() {
+    this.setState({isRegistered: true});
+  }
+
   render() {
     const isRegistered = this.state.isRegistered;
     let form = null;
     if (isRegistered) {
       form = <LoginForm onSignIn={this.props.onSignIn} onClick={this.register.bind(this)} />;
     } else {
-      form = <RegistrationForm onRegistration={this.props.onRegistration} />;
+      form = <RegistrationForm onRegistration={this.props.onRegistration} onClick={this.goBack.bind(this)} />;
     }
     return (
       <div>

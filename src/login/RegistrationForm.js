@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Forms.css';
+import App from '../App.js';
 import Input from 'react-bootstrap';
 import Button from 'react-bootstrap';
 
@@ -13,11 +14,12 @@ class RegistrationForm extends Component {
 
   render() {
     return (
-      <form className="Login" onSubmit={this.handleRegistration.bind(this)}>
-        <input className="Input" type="text" ref="username" placeholder="Benutzername" required/><br />
-        <input className="Input" type="password" ref="password" placeholder="Passwort" required/><br />
-        <button className="Button" type="submit">Registrieren</button>
-      </form>
+          <form className="Login" onSubmit={this.handleRegistration.bind(this)}>
+            <input className="Input" type="text" ref="username" placeholder="Benutzername" required/><br />
+            <input className="Input" type="password" ref="password" placeholder="Passwort" required/><br />
+            <button className="Button" type="submit">Registrieren</button>
+            <button className="Button" type="reset" onClick={this.props.onClick}>Abbrechen</button>
+          </form>
     );
   }
 }
