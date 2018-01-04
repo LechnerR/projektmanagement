@@ -44,18 +44,6 @@ class NewProject extends Component {
           <textarea className="Input" type="text" ref="projectDescription" rows="15" placeholder="Projektbeschreibung" defaultValue={project.projectDescription} required/><br />
           <textarea className="Input" type="text" ref="projectNotice" rows="10" placeholder="Projektnotizen" defaultValue={project.projectNotice} /><br />
           <div className="Container">
-            <h3 className="Heading">Aufgaben</h3>
-            <Link to="/newTask" className="Button"><i id="NewProject" className="fa fa-plus-circle"></i>neue Aufgabe</Link>
-          </div>
-          <div className="Container">
-            <h3 className="Heading">Benutzer</h3>
-            <p>Liste der MA</p>
-          </div>
-          <div className="Container">
-            <h3 className="Heading">Meilensteine</h3>
-            <p>Liste der Meilensteine</p>
-          </div>
-          <div className="Container">
             <button className="Button" type="submit">Speichern</button>
             <button className="Button" type="reset"><Link to="/dashboard">Abbrechen</Link></button>
           </div>

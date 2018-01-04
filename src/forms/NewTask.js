@@ -37,13 +37,8 @@ class NewTask extends Component {
             </label><br />
           </div>
           <div className="Container">
-            <h3 className="Heading">Benutzer</h3>
-            <p>Max Mustermann</p>
-            <Link to="/newEmployee" className="Button"><i id="NewProject" className="fa fa-plus-circle"></i>neuer Benutzer</Link>
-          </div>
-          <div className="Container">
             <button className="Button" type="submit">Speichern</button>
-            <button className="Button" type="reset"><Link to="/newProject">Abbrechen</Link></button>
+            <button className="Button" type="reset"><Link to="/dashboard">Abbrechen</Link></button>
           </div>
         </form>
       </div>

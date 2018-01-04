@@ -11,6 +11,7 @@ import Detailview from '../project/Detailview.js';
 import NewProject from '../forms/NewProject.js';
 import NewTask from '../forms/NewTask.js';
 import NewEmployee from '../forms/NewEmployee.js';
+import TaskDetails from '../project/TaskDetails.js';
 
 const Projects = () => {
   return (
@@ -20,6 +21,7 @@ const Projects = () => {
       <Route path='/newProject' component={NewProject} />
       <Route path='/newTask' component={NewTask} />
       <Route path='/newEmployee' component={NewEmployee} />
+      <Route path='/taskDetails/:id' component={TaskDetails} />
     </Switch>
   )
 }

@@ -9,4 +9,10 @@
 
 .List {
   list-style-type: none;
+  padding: 0px;
+}
+
+.BackButton {
+  margin-top: 50px;
+  float: right;
 }

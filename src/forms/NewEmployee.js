@@ -24,7 +24,7 @@ class NewEmployee extends Component {
           <input className="Input" type="email" ref="email" placeholder="E-Mail" required/><br />
           <div className="Container">
             <button className="Button" type="submit">Speichern</button>
-            <button className="Button" type="reset"><Link to="/newTask">Abbrechen</Link></button>
+            <button className="Button" type="reset"><Link to="/dashboard">Abbrechen</Link></button>
           </div>
         </form>
       </div>
