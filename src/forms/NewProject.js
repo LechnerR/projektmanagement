@@ -3,17 +3,6 @@ import ReactDOM from 'react-dom';
 import { Link, Switch, Route } from 'react-router-dom';
 import './Forms.css';
 
-// const SomethingNew = () => {
-//   return (
-//     <Switch>
-//       <Route path='/newProject' component={NewProject} />
-//       // <Route path='/newTask' component={NewTask} />
-//       // <Route path='/newEmployee' component={NewEmployee} />
-//       // <Route path='/newMilestone' component={NewMilestone} />
-//     </Switch>
-//   )
-// }
-
 class NewProject extends Component {
 
   handleNewProject(e) {
@@ -49,7 +38,6 @@ class NewProject extends Component {
           </div>
           <div className="Container">
             <h3 className="Heading">Meilensteine</h3>
-            <Link to="/newMilestone" className="Button"><i id="NewProject" className="fa fa-plus-circle"></i>neuer Meilenstein</Link>
           </div>
           <div className="Container">
             <button className="Button" type="submit">Speichern</button>

@@ -29,12 +29,17 @@ class NewTask extends Component {
           <textarea className="Input" type="text" ref="taskDescription" rows="15" placeholder="Aufgabenbeschreibung" required/><br />
           <textarea className="Input" type="text" ref="taskNotice" rows="10" placeholder="Aufgabennotizen" /><br />
           <div className="Container">
-            <h3 className="Heading">Benutzer</h3>
-            <Link to="/newEmployee" className="Button"><i id="NewProject" className="fa fa-plus-circle"></i>neuer Benutzer</Link>
+            <h3 className="Heading">Deadline</h3>
+            <input className="Input" type="date" ref="date" required/><br />
+            <label>
+              <input type="checkbox" ref="milestone" required/>
+              als Meilenstein festlegen
+            </label><br />
           </div>
           <div className="Container">
-            <h3 className="Heading">Termine</h3>
-            <Link to="/newMilestone" className="Button"><i id="NewProject" className="fa fa-plus-circle"></i>neuer Termin</Link>
+            <h3 className="Heading">Benutzer</h3>
+            <p>Max Mustermann</p>
+            <Link to="/newEmployee" className="Button"><i id="NewProject" className="fa fa-plus-circle"></i>neuer Benutzer</Link>
           </div>
           <div className="Container">
             <button className="Button" type="submit">Speichern</button>
