@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import {
   Route,
   Link,
-  Switch,
-  Redirect
+  Switch
 } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-bootstrap';
 import 'font-awesome/css/font-awesome.min.css';
@@ -65,6 +64,7 @@ function AllProjects(props) {
                   <h3>{p.title}</h3>
                   <p>{p.description}</p>
                   <p><Link className="Details" to={`/projects/${p.id}`}>Details</Link></p>
+                  <button className="Trash" title="Projekt löschen"><i className="fa fa-trash-o"></i></button>
                 </div>
               </Col>
             ))

@@ -1,0 +1,12 @@
+.ProjectDetails {
+  background-color: #f7f7f7;
+  width: 80%;
+  text-align: center;
+  display: inline-block;
+  margin: 5px;
+  border-radius: 10px;
+}
+
+.List {
+  list-style-type: none;
+}

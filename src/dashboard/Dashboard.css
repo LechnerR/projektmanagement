@@ -33,3 +33,11 @@ a:link, a:visited, a:hover, a:active {
 #NewProject {
   margin-right: 5px;
 }
+
+.Trash {
+  text-align: center;
+  border: none;
+  background-color: #f7f7f7;
+  padding-bottom: 10px;
+  color: #303030;
+}
