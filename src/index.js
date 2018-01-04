@@ -17,7 +17,7 @@ const Root = () => {
     <BrowserRouter>
       <div>
         <Switch>
-          <Route exact path='/' component={App}/>
+          <Route path='/' component={App}/>
           // just for testing
           <Route exact path='/dashboard' component={Dashboard}/>
         </Switch>

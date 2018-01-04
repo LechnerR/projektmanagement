@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
+import {
+  BrowserRouter,
+  Route,
+  Link,
+  Switch,
+  Redirect
+} from 'react-router-dom';
 import 'font-awesome/css/font-awesome.min.css';
 import logo from './logo.svg';
 import './App.css';
@@ -48,7 +55,10 @@ class App extends Component {
           {
             (this.state.user) ?
             // if user show dashboard
+            <div>
+              <Redirect to="/dashboard" />
             <Dashboard />
+            </div>
 
             :
             // if no user - login
