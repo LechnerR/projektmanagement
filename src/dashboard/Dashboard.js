@@ -1,17 +1,32 @@
 import React, { Component } from 'react';
+import {
+  BrowserRouter,
+  Route,
+  Link,
+  Switch,
+  Redirect
+} from 'react-router-dom';
 import Button from 'react-bootstrap';
 import Jumbotron from 'react-bootstrap';
 import { Grid, Row, Col } from 'react-bootstrap';
 import 'font-awesome/css/font-awesome.min.css';
 import './Dashboard.css';
 
+const Projects = () => {
+  return (
+    <Switch>
+      <Route path='/dashboard' component={AllProjects} />
+      <Route path='/projects/:id' component={Project} />
+    </Switch>
+  )
+}
+
 class Dashboard extends Component {
 
   render () {
     return (
       <div>
-        <h2>Projektübersicht</h2>
-        <AllProjects />
+        <Projects />
         <button className="Button NewProject"><i id="NewProject" className="fa fa-plus-circle"></i>neues Projekt</button>
       </div>
     );
@@ -36,23 +51,41 @@ const ProjectAPI = {
 
 function AllProjects(props) {
   return (
-    <Grid>
-      <Row className="show-grid">
-        {
-          ProjectAPI.all().map(p => (
-            <Col xs={6} md={4} key={p.id} className="Project">
-              <div className="jumbotron">
-                <h3>{p.title}</h3>
-                <p>{p.description}</p>
-                <p><button className="Details">Details</button></p>
-              </div>
-            </Col>
-          ))
-        }
+    <div>
+      <h2>Projektübersicht</h2>
+      <Grid>
+        <Row className="show-grid">
+          {
+            ProjectAPI.all().map(p => (
+              <Col xs={6} md={4} key={p.id} className="Project">
+                <div className="jumbotron">
+                  <h3>{p.title}</h3>
+                  <p>{p.description}</p>
+                  <p><button className="Details"><Link to={`/projects/${p.id}`}>Details</Link></button></p>
+                </div>
+              </Col>
+            ))
+          }
 
-      </Row>
-    </Grid>
+        </Row>
+      </Grid>
+    </div>
   );
+}
+
+function Project(props) {
+  const project = ProjectAPI.get(
+    parseInt(props.match.params.id)
+  )
+  if (!project) {
+    return <div>Sorry, but the project was not found</div>
+  }
+  return (
+    <div>
+      <h1>{project.title} (#{project.id})</h1>
+      <p>{project.description}</p>
+    </div>
+  )
 }
 
 export default Dashboard;
