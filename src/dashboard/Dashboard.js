@@ -8,12 +8,15 @@ import {
 import { Grid, Row, Col } from 'react-bootstrap';
 import 'font-awesome/css/font-awesome.min.css';
 import './Dashboard.css';
+import Detailview from '../project/Detailview.js';
+import NewProject from '../forms/NewProject.js';
 
 const Projects = () => {
   return (
     <Switch>
       <Route path='/dashboard' component={AllProjects} />
       <Route path='/projects/:id' component={Project} />
+      <Route path='/newProject' component={NewProject} />
     </Switch>
   )
 }
@@ -24,7 +27,6 @@ class Dashboard extends Component {
     return (
       <div>
         <Projects />
-        <button className="Button NewProject"><i id="NewProject" className="fa fa-plus-circle"></i>neues Projekt</button>
       </div>
     );
   }
@@ -65,6 +67,7 @@ function AllProjects(props) {
           }
         </Row>
       </Grid>
+      <Link to="/newProject" className="Button NewProject"><i id="NewProject" className="fa fa-plus-circle"></i>neues Projekt</Link>
     </div>
   );
 }
@@ -77,10 +80,7 @@ function Project(props) {
     return <div>Sorry, but the project was not found</div>
   }
   return (
-    <div>
-      <h1>{project.title} (#{project.id})</h1>
-      <p>{project.description}</p>
-    </div>
+    <Detailview project={project} />
   )
 }
 

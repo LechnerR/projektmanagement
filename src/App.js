@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import 'font-awesome/css/font-awesome.min.css';
 import './App.css';
-import LoginControll from './login/LoginControll';
+import LoginControll from './forms/LoginControll';
 import Dashboard from './dashboard/Dashboard.js';
 import Header from './header/Header';
 
