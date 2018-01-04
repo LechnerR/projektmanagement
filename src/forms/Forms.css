@@ -6,6 +6,8 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
+  font-family: Arial;
+  overflow: hidden;
 }
 
 ::-webkit-input-placeholder {
@@ -26,4 +28,26 @@
 .Register {
   font-size: 12px;
   margin: 20px 0px 0px 0px;
+}
+
+.NewProjectForm {
+  text-align: center;
+}
+
+.Heading {
+  left: 0px;
+  position: relative;
+}
+
+a:link, a:visited, a:hover, a:active {
+  text-decoration: none;
+  color: #303030;
+}
+
+#NewProject {
+  margin-right: 5px;
+}
+
+.Container {
+  margin: 25px;
 }
