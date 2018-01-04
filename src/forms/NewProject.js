@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Link } from 'react-router-dom';
+import { Link, Switch, Route } from 'react-router-dom';
 import './Forms.css';
+
+// const SomethingNew = () => {
+//   return (
+//     <Switch>
+//       <Route path='/newProject' component={NewProject} />
+//       // <Route path='/newTask' component={NewTask} />
+//       // <Route path='/newEmployee' component={NewEmployee} />
+//       // <Route path='/newMilestone' component={NewMilestone} />
+//     </Switch>
+//   )
+// }
 
 class NewProject extends Component {
 
@@ -10,6 +21,9 @@ class NewProject extends Component {
     let projectTitle = this.refs.projectTitle.value;
     let projectDescription = this.refs.projectDescription.value;
     let projectNotice = this.refs.projectNotice.value;
+
+    // hier müssen iwie die ganzen Daten gesammelt werden damit man sie weiterverarbeiten kann
+
     // tasks
     // employees
     // dates
@@ -46,5 +60,6 @@ class NewProject extends Component {
     )
   }
 }
+
 
 export default NewProject;

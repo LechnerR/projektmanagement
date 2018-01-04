@@ -10,6 +10,8 @@ import 'font-awesome/css/font-awesome.min.css';
 import './Dashboard.css';
 import Detailview from '../project/Detailview.js';
 import NewProject from '../forms/NewProject.js';
+import NewTask from '../forms/NewTask.js';
+import NewEmployee from '../forms/NewEmployee.js';
 
 const Projects = () => {
   return (
@@ -17,6 +19,8 @@ const Projects = () => {
       <Route path='/dashboard' component={AllProjects} />
       <Route path='/projects/:id' component={Project} />
       <Route path='/newProject' component={NewProject} />
+      <Route path='/newTask' component={NewTask} />
+      <Route path='/newEmployee' component={NewEmployee} />
     </Switch>
   )
 }
