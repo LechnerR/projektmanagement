@@ -1,19 +1,10 @@
 import React, { Component } from 'react';
-import ReactDom from 'react-dom';
-import {
-  BrowserRouter,
-  Route,
-  Link,
-  Switch,
-  Redirect
-} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import 'font-awesome/css/font-awesome.min.css';
-import logo from './logo.svg';
 import './App.css';
 import LoginControll from './login/LoginControll';
 import Dashboard from './dashboard/Dashboard.js';
 import Header from './header/Header';
-import Form from 'react-bootstrap';
 
 class App extends Component {
 

@@ -9,6 +9,7 @@
 }
 
 .Details {
+  display: inline-block;
   border-radius: 5px;
   text-align: center;
   border: none;
@@ -17,6 +18,10 @@
   padding: 10px 20px;
   margin: 8px;
   color: #303030;
+}
+
+a:link, a:visited, a:hover, a:active {
+  text-decoration: none;
 }
 
 .NewProject {

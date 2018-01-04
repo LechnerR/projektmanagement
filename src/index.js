@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import {
   BrowserRouter,
   Route,
-  Link,
   Switch
 } from 'react-router-dom';
 import './index.css';

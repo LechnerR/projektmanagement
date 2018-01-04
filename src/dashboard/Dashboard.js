@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import {
-  BrowserRouter,
   Route,
   Link,
   Switch,
   Redirect
 } from 'react-router-dom';
-import Button from 'react-bootstrap';
-import Jumbotron from 'react-bootstrap';
 import { Grid, Row, Col } from 'react-bootstrap';
 import 'font-awesome/css/font-awesome.min.css';
 import './Dashboard.css';
@@ -61,12 +58,11 @@ function AllProjects(props) {
                 <div className="jumbotron">
                   <h3>{p.title}</h3>
                   <p>{p.description}</p>
-                  <p><button className="Details"><Link to={`/projects/${p.id}`}>Details</Link></button></p>
+                  <p><Link className="Details" to={`/projects/${p.id}`}>Details</Link></p>
                 </div>
               </Col>
             ))
           }
-
         </Row>
       </Grid>
     </div>
@@ -75,7 +71,7 @@ function AllProjects(props) {
 
 function Project(props) {
   const project = ProjectAPI.get(
-    parseInt(props.match.params.id)
+    parseInt(props.match.params.id,10)
   )
   if (!project) {
     return <div>Sorry, but the project was not found</div>

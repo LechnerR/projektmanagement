@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import './Forms.css';
-import App from '../App.js';
-import Input from 'react-bootstrap';
-import Button from 'react-bootstrap';
 
 class RegistrationForm extends Component {
   handleRegistration(e) {

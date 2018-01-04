@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import './Forms.css';
-import Input from 'react-bootstrap';
-import Button from 'react-bootstrap';
 import LoginForm from './LoginForm.js';
 import RegistrationForm from './RegistrationForm.js';
 

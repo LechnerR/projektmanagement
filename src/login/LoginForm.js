@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import './Forms.css';
-import Input from 'react-bootstrap';
-import Button from 'react-bootstrap';
 
 class LoginForm extends Component {
 
