@@ -21,23 +21,39 @@ class NewProject extends Component {
   }
 
   render () {
+    let project = {
+      projectTitle: "",
+      projectDescription: "",
+      projectNotice: ""
+      // tasks, employees and milestones are still missing
+    };
+    if (this.props.project) {
+      project = {
+        projectTitle: this.props.project.title,
+        projectDescription: this.props.project.description,
+        projectNotice: this.props.project.notice
+      }
+    }
+
+
     return (
       <div>
         <h2>Neues Projekt anlegen</h2>
         <form className="NewProjectForm" onSubmit={this.handleNewProject.bind(this)}>
-          <input className="Input" type="text" ref="projectTitle" placeholder="Projekttitel" required/><br />
-          <textarea className="Input" type="text" ref="projectDescription" rows="15" placeholder="Projektbeschreibung" required/><br />
-          <textarea className="Input" type="text" ref="projectNotice" rows="10" placeholder="Projektnotizen" /><br />
+          <input className="Input" type="text" ref="projectTitle" placeholder="Projekttitel" defaultValue={project.projectTitle} required/><br />
+          <textarea className="Input" type="text" ref="projectDescription" rows="15" placeholder="Projektbeschreibung" defaultValue={project.projectDescription} required/><br />
+          <textarea className="Input" type="text" ref="projectNotice" rows="10" placeholder="Projektnotizen" defaultValue={project.projectNotice} /><br />
           <div className="Container">
             <h3 className="Heading">Aufgaben</h3>
             <Link to="/newTask" className="Button"><i id="NewProject" className="fa fa-plus-circle"></i>neue Aufgabe</Link>
           </div>
           <div className="Container">
             <h3 className="Heading">Benutzer</h3>
-            <Link to="/newEmployee" className="Button"><i id="NewProject" className="fa fa-plus-circle"></i>neuer Benutzer</Link>
+            <p>Liste der MA</p>
           </div>
           <div className="Container">
             <h3 className="Heading">Meilensteine</h3>
+            <p>Liste der Meilensteine</p>
           </div>
           <div className="Container">
             <button className="Button" type="submit">Speichern</button>

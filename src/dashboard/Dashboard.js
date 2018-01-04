@@ -37,11 +37,11 @@ class Dashboard extends Component {
 
 const ProjectAPI = {
   projects: [
-    { id: 1, start_date: "1.1.2001", end_date: "1.1.2001", description:"Projekt A", title:"Projekt A", notice:"Notiz" },
-    { id: 2, start_date: "1.1.2001", end_date: "1.1.2001", description:"Projekt B", title:"Projekt B", notice:"Notiz" },
-    { id: 3, start_date: "1.1.2001", end_date: "1.1.2001", description:"Projekt C", title:"Projekt C", notice:"Notiz" },
-    { id: 4, start_date: "1.1.2001", end_date: "1.1.2001", description:"Projekt D", title:"Projekt D", notice:"Notiz" },
-    { id: 5, start_date: "1.1.2001", end_date: "1.1.2001", description:"Projekt E", title:"Projekt E", notice:"Notiz" }
+    { id: 1, start_date: "1.1.2001", end_date: "1.1.2001", description:"Beschreibung A", title:"Projekt A", notice:"Notiz" },
+    { id: 2, start_date: "1.1.2001", end_date: "1.1.2001", description:"Beschreibung B", title:"Projekt B", notice:"Notiz" },
+    { id: 3, start_date: "1.1.2001", end_date: "1.1.2001", description:"Beschreibung C", title:"Projekt C", notice:"Notiz" },
+    { id: 4, start_date: "1.1.2001", end_date: "1.1.2001", description:"Beschreibung D", title:"Projekt D", notice:"Notiz" },
+    { id: 5, start_date: "1.1.2001", end_date: "1.1.2001", description:"Beschreibung E", title:"Projekt E", notice:"Notiz" }
     // { id: 6, start_date: "1.1.2001", end_date: "1.1.2001", description:"Projekt F", title:"Projekt F", notice:"Notiz" }
   ],
   all: function() { return this.projects},
@@ -64,6 +64,7 @@ function AllProjects(props) {
                   <h3>{p.title}</h3>
                   <p>{p.description}</p>
                   <p><Link className="Details" to={`/projects/${p.id}`}>Details</Link></p>
+                  // TODO button needs functionality
                   <button className="Trash" title="Projekt löschen"><i className="fa fa-trash-o"></i></button>
                 </div>
               </Col>

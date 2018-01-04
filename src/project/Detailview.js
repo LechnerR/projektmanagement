@@ -23,6 +23,12 @@ class Detailview extends Component {
               </Col>
               <Col xs={6} md={4} className="ProjectDetails">
                 <div className="jumbotron">
+                  <h3>Notizen</h3>
+                  <p>{this.props.project.notice}</p>
+                </div>
+              </Col>
+              <Col xs={6} md={4} className="ProjectDetails">
+                <div className="jumbotron">
                   <h3>Termine</h3>
                   <ul className="List">
                     <li>asdf</li>
@@ -30,8 +36,6 @@ class Detailview extends Component {
                   </ul>
                 </div>
               </Col>
-            </Row>
-            <Row className="show-grid">
               <Col xs={6} md={4} className="ProjectDetails">
                 <div className="jumbotron">
                   <h3>Aufgaben</h3>
