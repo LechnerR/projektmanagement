@@ -8,10 +8,13 @@ import './Forms.css';
 var axios = require('axios')
 const url = 'https://b0qco5h7cj.execute-api.eu-central-1.amazonaws.com/pm/'
 var createProject = {};
+var updateProject = false;
+var initUpdate = true;
 
 class NewProject extends Component {
 
     constructor(props) {
+        console.log('NewProject constructor - props', props);
         super(props);
         this.state = {
             value: {
@@ -49,7 +52,8 @@ class NewProject extends Component {
             value: {
                 projectTitle: event.target.value,
                 projectDescription: this.state.value.projectDescription,
-                projectNotice: this.state.value.projectNotice
+                projectNotice: this.state.value.projectNotice,
+                ID: this.state.value.ID
             }
         });
     }
@@ -59,7 +63,8 @@ class NewProject extends Component {
             value: {
                 projectTitle: this.state.value.projectTitle,
                 projectDescription: event.target.value,
-                projectNotice: this.state.value.projectNotice
+                projectNotice: this.state.value.projectNotice,
+                ID: this.state.value.ID
             }
         });
     }
@@ -69,25 +74,29 @@ class NewProject extends Component {
             value: {
                 projectTitle: this.state.value.projectTitle,
                 projectDescription: this.state.value.projectDescription,
-                projectNotice: event.target.value
+                projectNotice: event.target.value,
+                ID: this.state.value.ID
             }
         });
     }
 
     render() {
-        let project = {
-            projectTitle: "",
-            projectDescription: "",
-            projectNotice: ""
-            // tasks, employees and milestones are still missing
-        };
-        if (this.props.project) {
-            project = {
-                projectTitle: this.props.project.title,
-                projectDescription: this.props.project.description,
-                projectNotice: this.props.project.notice
-            }
 
+        if (initUpdate) {
+            if (this.props.location.state) {
+                if (this.props.location.state.project) {
+                    updateProject = true;
+                    initUpdate = false;
+                    this.state = {
+                        value: {
+                            projectTitle: this.props.location.state.project.Title,
+                            projectDescription: this.props.location.state.project.Description,
+                            projectNotice: this.props.location.state.project.Notice,
+                            ID: this.props.location.state.project.ID
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -96,12 +105,12 @@ class NewProject extends Component {
                 <h2>Neues Projekt anlegen</h2>
                 <form className="NewProjectForm" onSubmit={this.handleNewProject.bind(this)}>
                     <input className="Input" type="text" ref="projectTitle" placeholder="Projekttitel"
-                           value={this.state.value.projectTitle} onChange={this.handleTitle} required/><br/>
+                           defaultValue={this.state.value.projectTitle} onChange={this.handleTitle} required/><br/>
                     <textarea className="Input" type="text" ref="projectDescription" rows="15"
-                              placeholder="Projektbeschreibung" value={this.state.value.projectDescription}
+                              placeholder="Projektbeschreibung" defaultValue={this.state.value.projectDescription}
                               onChange={this.handleDescription} required/><br/>
                     <textarea className="Input" type="text" ref="projectNotice" rows="10" placeholder="Projektnotizen"
-                              value={this.state.value.projectNotice} onChange={this.handleNotice}/><br/>
+                              defaultValue={this.state.value.projectNotice} onChange={this.handleNotice}/><br/>
                     <div className="Container">
                         <button className="Button" type="submit" onClick={() => {
                             this.saveValues();
@@ -116,15 +125,31 @@ class NewProject extends Component {
     }
 
     saveValues() {
-        createProject = {
-            Title: this.state.value.projectTitle,
-            Description: this.state.value.projectDescription,
-            Notice: this.state.value.projectNotice,
-            ID: new Date().valueOf()
+        if (updateProject) {
+            createProject = {
+                Title: this.state.value.projectTitle,
+                Description: this.state.value.projectDescription,
+                Notice: this.state.value.projectNotice,
+                ID: this.state.value.ID
+            }
+        } else {
+            createProject = {
+                Title: this.state.value.projectTitle,
+                Description: this.state.value.projectDescription,
+                Notice: this.state.value.projectNotice,
+                ID: new Date().valueOf()
+            }
         }
+
+
     }
 
     createProject() {
+        if (updateProject) {
+            console.log('Lets update a project...');
+            updateProject = false;
+            initUpdate = true;
+        }
         Dashboard.reload = true;
         console.log('createProject - createProject', createProject);
         axios.post(url + 'Project', createProject)

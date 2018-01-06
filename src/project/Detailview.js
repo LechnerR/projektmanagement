@@ -11,7 +11,11 @@ import './Detailview.css';
 var axios = require('axios')
 const url = 'https://b0qco5h7cj.execute-api.eu-central-1.amazonaws.com/pm/'
 
+var tasks = [];
+var employees = [];
+
 class Detailview extends Component {
+    static reload = false;
 
     constructor(props) {
         super(props);
@@ -19,6 +23,45 @@ class Detailview extends Component {
         this.deleteProject = this.deleteProject.bind(this);
 
 
+    }
+
+    componentDidMount() {
+        var self = this;
+        axios.get(url + 'ProjectTask?Project=' + this.props.project.ID)
+            .then(function (response) {
+                tasks = response.data.Items;
+                axios.get(url + 'Employee?Project=' + this.props.project.ID)
+                    .then(function (response) {
+                        employees = response.data.Items;
+                        self.forceUpdate();
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    reload() {
+        var self = this;
+        axios.get(url + 'ProjectTask?Project=' + this.props.project.ID)
+            .then(function (response) {
+                tasks = response.data.Items;
+                axios.get(url + 'Employee?Project=' + this.props.project.ID)
+                    .then(function (response) {
+                        employees = response.data.Items;
+                        self.forceUpdate();
+                        Detailview.reload = false;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     deleteProject(id) {
@@ -33,6 +76,9 @@ class Detailview extends Component {
     }
 
     render() {
+        if (Detailview.reload) {
+            this.reload();
+        }
         console.log('Detailview - this.props', this.props);
         return (
             <div>
@@ -54,19 +100,30 @@ class Detailview extends Component {
                         <Col xs={6} md={4} className="ProjectDetails">
                             <div className="jumbotron">
                                 <h3>Termine</h3>
-                                <ul className="List">
-                                    <li>asdf</li>
-                                    <li>asdf</li>
-                                </ul>
+                                {
+                                    tasks.map(t => (
+                                        <ul className="List">
+                                            <Link to={`/TaskDetails/${t.ID}`}>{t.Title} - {t.Deadline}</Link>
+                                        </ul>
+                                    ))
+                                }
                             </div>
                         </Col>
                         <Col xs={6} md={4} className="ProjectDetails">
                             <div className="jumbotron">
                                 <h3>Aufgaben</h3>
-                                <ul className="List">
+                                {
+                                    tasks.map(t => (
+                                        <ul className="List">
+                                            <Link to={`/TaskDetails/${t.ID}`}>{t.Title}</Link>
+                                        </ul>
+                                    ))
+                                }
+
+
+                                {/*<ul className="List">
                                     <Link to="/TaskDetails/1">Aufgabe 1</Link>
-                                    <li>asdf</li>
-                                </ul>
+                                </ul>*/}
                                 <div className="Container">
                                     <Link to="/newTask" className="Button"><i id="NewProject"
                                                                               className="fa fa-plus-circle"></i>neue
@@ -77,14 +134,20 @@ class Detailview extends Component {
                         <Col xs={6} md={4} className="ProjectDetails">
                             <div className="jumbotron">
                                 <h3>Team</h3>
-                                <ul className="List">
-                                    <li>asdf</li>
-                                    <li>asdf</li>
-                                </ul>
+                                {
+                                    employees.map(e => (
+                                        <ul className="List">
+                                            {e.Name} - {e.Email}
+                                        </ul>
+                                    ))
+                                }
                             </div>
                         </Col>
                     </Row>
                 </Grid>
+                <button className="Button BackButton" type="update"><Link to={{
+                    pathname: '/newProject', state: {project: this.props.project}
+                }}>Bearbeiten</Link></button>
                 <button className="Button BackButton" type="delete"
                         onClick={() => this.deleteProject(this.props.project.ID)}><Link to="/dashboard">Löschen</Link>
                 </button>
