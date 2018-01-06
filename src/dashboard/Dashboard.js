@@ -80,6 +80,14 @@ class Dashboard extends Component {
     }
 }
 
+const ProjectAPI = {
+    get: function (id) {
+        const isProject = p => p.ID === id
+        return projects.find(isProject)
+    }
+}
+
+
 function AllProjects(props) {
     return (
         <div>
