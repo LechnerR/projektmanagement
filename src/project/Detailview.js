@@ -45,7 +45,7 @@ class Detailview extends Component {
     }
 
     reload() {
-        var self = this;
+        /*var self = this;
         axios.get(url + 'ProjectTask?Project=' + this.props.project.ID)
             .then(function (response) {
                 tasks = response.data.Items;
@@ -61,7 +61,7 @@ class Detailview extends Component {
             })
             .catch(function (error) {
                 console.log(error);
-            });
+            });*/
     }
 
     deleteProject(id) {
@@ -125,8 +125,10 @@ class Detailview extends Component {
                                     <Link to="/TaskDetails/1">Aufgabe 1</Link>
                                 </ul>*/}
                                 <div className="Container">
-                                    <Link to="/newTask" className="Button"><i id="NewProject"
-                                                                              className="fa fa-plus-circle"></i>neue
+                                    <Link
+                                        to={{pathname: '/newTask', state: {task: {Project_ID: this.props.project.ID}}}}
+                                        className="Button"><i id="NewProject"
+                                                              className="fa fa-plus-circle"></i>neue
                                         Aufgabe</Link>
                                 </div>
                             </div>

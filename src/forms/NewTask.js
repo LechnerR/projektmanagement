@@ -2,48 +2,212 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Link, Switch, Route } from 'react-router-dom';
 import './Forms.css';
+import Detailview from "../project/Detailview";
+import Toggle from 'react-toggle'
+
+
+var axios = require('axios')
+const url = 'https://b0qco5h7cj.execute-api.eu-central-1.amazonaws.com/pm/'
+var createTask = {};
+var updateTask = false;
+var initUpdate = true;
 
 class NewTask extends Component {
 
-  handleNewTask(e) {
-    e.preventDefault();
-    let taskTitle = this.refs.taskTitle.value;
-    let taskDescription = this.refs.taskDescription.value;
-    let taskNotice = this.refs.taskNotice.value;
+    constructor(props) {
+        console.log('NewTask constructor - props', props);
+        super(props);
+        this.state = {
+            value: {
+                taskTitle: '',
+                taskDescription: '',
+                taskNotice: '',
+                taskDeadline: '',
+                taskMilestone: false,
+                projectID: this.props.location.state.task.Project_ID
+            }
+        };
 
-    // hier müssen iwie die ganzen Daten gesammelt werden damit man sie weiterverarbeiten kann
+        this.handleTitle = this.handleTitle.bind(this);
+        this.handleDescription = this.handleDescription.bind(this);
+        this.handleNotice = this.handleNotice.bind(this);
+        this.handleDeadline = this.handleDeadline.bind(this);
+        this.handleMilestone = this.handleMilestone.bind(this);
 
-    // tasks
-    // employees
-    // dates
 
-    //this.props.onRegistration(projectTitle, projectDescription, projectNotice);
-  }
+        // this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+
+    handleTitle(event) {
+        this.setState({
+            value: {
+                taskTitle: event.target.value,
+                taskDescription: this.state.value.taskDescription,
+                taskNotice: this.state.value.taskNotice,
+                taskDeadline: this.state.value.taskDeadline,
+                taskMilestone: this.state.value.taskMilestone,
+                projectID: this.state.value.projectID,
+                ID: this.state.value.ID
+            }
+        });
+    }
+
+    handleDescription(event) {
+        this.setState({
+            value: {
+                taskTitle: this.state.value.taskTitle,
+                taskDescription: event.target.value,
+                taskNotice: this.state.value.taskNotice,
+                taskDeadline: this.state.value.taskDeadline,
+                taskMilestone: this.state.value.taskMilestone,
+                projectID: this.state.value.projectID,
+                ID: this.state.value.ID
+            }
+        });
+    }
+
+    handleNotice(event) {
+        this.setState({
+            value: {
+                taskTitle: this.state.value.taskTitle,
+                taskDescription: this.state.value.taskDescription,
+                taskNotice: event.target.value,
+                taskDeadline: this.state.value.taskDeadline,
+                taskMilestone: this.state.value.taskMilestone,
+                projectID: this.state.value.projectID,
+                ID: this.state.value.ID
+            }
+        });
+    }
+
+    handleDeadline(event) {
+        this.setState({
+            value: {
+                taskTitle: this.state.value.taskTitle,
+                taskDescription: this.state.value.taskDescription,
+                taskNotice: this.state.value.taskNotice,
+                taskDeadline: event.target.value,
+                taskMilestone: this.state.value.taskMilestone,
+                projectID: this.state.value.projectID,
+                ID: this.state.value.ID
+            }
+        });
+    }
+
+    handleMilestone(event) {
+        this.setState({
+            value: {
+                taskTitle: this.state.value.taskTitle,
+                taskDescription: this.state.value.taskDescription,
+                taskNotice: this.state.value.taskNotice,
+                taskDeadline: this.state.value.taskDeadline,
+                taskMilestone: event.target.checked,
+                projectID: this.state.value.projectID,
+                ID: this.state.value.ID
+            }
+        });
+    }
 
   render () {
+
+      if (initUpdate) {
+          if (this.props.location.state) {
+              if (this.props.location.state.project) {
+                  updateTask = true;
+                  initUpdate = false;
+                  this.state = {
+                      value: {
+                          taskTitle: this.props.location.state.task.Title,
+                          taskDescription: this.props.location.state.task.Description,
+                          taskNotice: this.props.location.state.task.Notice,
+                          taskDeadline: this.props.location.state.task.Deadline,
+                          taskMilestone: this.props.location.state.task.Milestone,
+                          projectID: this.props.location.state.task.Project_ID,
+                          ID: this.props.location.state.task.ID
+                      }
+                  }
+              }
+          }
+      }
+
     return (
       <div>
         <h2>Neue Aufgabe anlegen</h2>
-        <form className="NewProjectForm" onSubmit={this.handleNewTask.bind(this)}>
-          <input className="Input" type="text" ref="taskTitle" placeholder="Aufgabentitel" required/><br />
-          <textarea className="Input" type="text" ref="taskDescription" rows="15" placeholder="Aufgabenbeschreibung" required/><br />
-          <textarea className="Input" type="text" ref="taskNotice" rows="10" placeholder="Aufgabennotizen" /><br />
+          <form className="NewProjectForm">
+              <input className="Input" type="text" ref="taskTitle" placeholder="Aufgabentitel"
+                     defaultValue={this.state.value.taskTitle} onChange={this.handleTitle} required/><br/>
+              <textarea className="Input" type="text" ref="taskDescription" rows="15" placeholder="Aufgabenbeschreibung"
+                        defaultValue={this.state.value.taskDescription} onChange={this.handleDescription}
+                        required/><br/>
+              <textarea className="Input" type="text" ref="taskNotice" rows="10" placeholder="Aufgabennotizen"
+                        defaultValue={this.state.value.taskNotice} onChange={this.handleNotice}/><br/>
           <div className="Container">
             <h3 className="Heading">Deadline</h3>
-            <input className="Input" type="date" ref="date" required/><br />
+              <input className="Input" type="date" ref="date" defaultValue={this.state.value.taskDeadline}
+                     onChange={this.handleDeadline} required/><br/>
             <label>
-              <input type="checkbox" ref="milestone" required/>
+                <Toggle ref="milestone" defaultChecked={this.state.value.taskMilestone} onChange={this.handleMilestone}
+                        required/>
               als Meilenstein festlegen
             </label><br />
           </div>
           <div className="Container">
-            <button className="Button" type="submit">Speichern</button>
-            <button className="Button" type="reset"><Link to="/dashboard">Abbrechen</Link></button>
+              <button className="Button" type="submit" onClick={() => {
+                  this.saveValues();
+                  this.createTask()
+              }}><Link to={`/projects/${this.state.value.projectID}`}>Speichern</Link></button>
+              <button className="Button" type="reset"><Link
+                  to={`/projects/${this.state.value.projectID}`}>Abbrechen</Link></button>
           </div>
         </form>
       </div>
     )
   }
+
+    saveValues() {
+        console.log('NewTask - saveValues - this.state.value', this.state.value);
+        if (updateTask) {
+            createTask = {
+                Title: this.state.value.taskTitle,
+                Description: this.state.value.taskDescription,
+                Notice: this.state.value.taskNotice,
+                Deadline: this.state.value.taskDeadline,
+                Milestone: this.state.value.Milestone,
+                Project_ID: this.state.value.projectID,
+                ID: this.state.value.ID
+            }
+        } else {
+            createTask = {
+                Title: this.state.value.taskTitle,
+                Description: this.state.value.taskDescription,
+                Notice: this.state.value.taskNotice,
+                Deadline: this.state.value.taskDeadline,
+                Milestone: this.state.value.Milestone,
+                Project_ID: this.state.value.projectID,
+                ID: new Date().valueOf()
+            }
+        }
+
+
+    }
+
+    createTask() {
+        if (updateTask) {
+            console.log('Lets update a task...');
+            updateTask = false;
+            initUpdate = true;
+        }
+        Detailview.reload = true;
+        console.log('createTask - createTask', createTask);
+        axios.post(url + 'ProjectTask', createTask)
+            .then(response => {
+                console.log('Aufgabe erfolgreich erstellt', response)
+            })
+            .catch(error => {
+                console.log(error)
+            });
+    }
 }
 
 
