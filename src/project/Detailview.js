@@ -116,7 +116,18 @@ class Detailview extends Component {
                                     tasks.map(t => (
                                         <ul className="List">
                                             <Link to={`/TaskDetails/${t.ID}`}>{t.Title}</Link>
+                                            <div className="Container">
+                                                <Link
+                                                    to={{
+                                                        pathname: '/newEmployee',
+                                                        state: {task: {ID: t.ID, Project_ID: this.props.project.ID}}
+                                                    }}
+                                                    className="Button"><i id="NewEmployee"
+                                                                          className="fa fa-plus-circle"></i>neuer
+                                                    Mitarbeiter</Link>
+                                            </div>
                                         </ul>
+
                                     ))
                                 }
 
