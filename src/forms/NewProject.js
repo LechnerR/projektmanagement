@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import {Link} from 'react-router-dom';
 import Dashboard from '../dashboard/Dashboard.js';
 
@@ -27,24 +26,11 @@ class NewProject extends Component {
         this.handleTitle = this.handleTitle.bind(this);
         this.handleDescription = this.handleDescription.bind(this);
         this.handleNotice = this.handleNotice.bind(this);
-
-        // this.handleSubmit = this.handleSubmit.bind(this);
     }
 
 
     handleNewProject(e) {
         e.preventDefault();
-        let projectTitle = this.refs.projectTitle.value;
-        let projectDescription = this.refs.projectDescription.value;
-        let projectNotice = this.refs.projectNotice.value;
-
-        // hier müssen iwie die ganzen Daten gesammelt werden damit man sie weiterverarbeiten kann
-
-        // tasks
-        // employees
-        // dates
-
-        //this.props.onRegistration(projectTitle, projectDescription, projectNotice);
     }
 
     handleTitle(event) {
@@ -99,10 +85,16 @@ class NewProject extends Component {
             }
         }
 
+        let Heading = null;
+        if (this.props.location.state) {
+            Heading = <h2>Projekt ändern</h2>;
+        } else {
+            Heading = <h2>Neues Projekt anlegen</h2>;
+        }
 
         return (
             <div>
-                <h2>Neues Projekt anlegen</h2>
+                {Heading}
                 <form className="NewProjectForm" onSubmit={this.handleNewProject.bind(this)}>
                     <input className="Input" type="text" ref="projectTitle" placeholder="Projekttitel"
                            defaultValue={this.state.value.projectTitle} onChange={this.handleTitle} required/><br/>
@@ -146,12 +138,10 @@ class NewProject extends Component {
 
     createProject() {
         if (updateProject) {
-            console.log('Lets update a project...');
             updateProject = false;
             initUpdate = true;
         }
         Dashboard.reload = true;
-        console.log('createProject - createProject', createProject);
         axios.post(url + 'Project', createProject)
             .then(response => {
                 console.log('Projekt erfolgreich erstellt', response)
@@ -161,6 +151,5 @@ class NewProject extends Component {
             });
     }
 }
-
 
 export default NewProject;

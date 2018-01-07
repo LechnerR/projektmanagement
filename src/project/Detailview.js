@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import 'font-awesome/css/font-awesome.min.css';
 import {Grid, Row, Col} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
-import TaskDetails from './TaskDetails.js';
 import Dashboard from '../dashboard/Dashboard.js';
 
 import './Detailview.css';
@@ -19,18 +17,15 @@ class Detailview extends Component {
 
     constructor(props) {
         super(props);
-
         this.deleteProject = this.deleteProject.bind(this);
-
-
     }
 
     componentDidMount() {
         var self = this;
-        axios.get(url + 'ProjectTask?Project=' + this.props.project.ID)
+        axios.get(url + 'ProjectTask?ProjectID=' + self.props.project.ID)
             .then(function (response) {
                 tasks = response.data.Items;
-                axios.get(url + 'Employee?Project=' + this.props.project.ID)
+                axios.get(url + 'Employee?ProjectID=' + self.props.project.ID)
                     .then(function (response) {
                         employees = response.data.Items;
                         self.forceUpdate();
@@ -45,11 +40,11 @@ class Detailview extends Component {
     }
 
     reload() {
-        /*var self = this;
-        axios.get(url + 'ProjectTask?Project=' + this.props.project.ID)
+        var self = this;
+        axios.get(url + 'ProjectTask?ProjectID=' + this.props.project.ID)
             .then(function (response) {
                 tasks = response.data.Items;
-                axios.get(url + 'Employee?Project=' + this.props.project.ID)
+                axios.get(url + 'Employee?ProjectID=' + this.props.project.ID)
                     .then(function (response) {
                         employees = response.data.Items;
                         self.forceUpdate();
@@ -61,7 +56,7 @@ class Detailview extends Component {
             })
             .catch(function (error) {
                 console.log(error);
-            });*/
+            });
     }
 
     deleteProject(id) {
@@ -79,7 +74,6 @@ class Detailview extends Component {
         if (Detailview.reload) {
             this.reload();
         }
-        console.log('Detailview - this.props', this.props);
         return (
             <div>
                 <h1>{this.props.project.Title}</h1>
@@ -103,7 +97,8 @@ class Detailview extends Component {
                                 {
                                     tasks.map(t => (
                                         <ul className="List">
-                                            <Link to={`/TaskDetails/${t.ID}`}>{t.Title} - {t.Deadline}</Link>
+                                            <Link to={`/TaskDetails/${t.ID}`}>{t.Title} {t.Description}
+                                                - {t.Deadline}</Link>
                                         </ul>
                                     ))
                                 }
@@ -116,25 +111,10 @@ class Detailview extends Component {
                                     tasks.map(t => (
                                         <ul className="List">
                                             <Link to={`/TaskDetails/${t.ID}`}>{t.Title}</Link>
-                                            <div className="Container">
-                                                <Link
-                                                    to={{
-                                                        pathname: '/newEmployee',
-                                                        state: {task: {ID: t.ID, Project_ID: this.props.project.ID}}
-                                                    }}
-                                                    className="Button"><i id="NewEmployee"
-                                                                          className="fa fa-plus-circle"></i>neuer
-                                                    Mitarbeiter</Link>
-                                            </div>
                                         </ul>
 
                                     ))
                                 }
-
-
-                                {/*<ul className="List">
-                                    <Link to="/TaskDetails/1">Aufgabe 1</Link>
-                                </ul>*/}
                                 <div className="Container">
                                     <Link
                                         to={{pathname: '/newTask', state: {task: {Project_ID: this.props.project.ID}}}}
