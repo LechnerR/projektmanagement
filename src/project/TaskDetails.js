@@ -63,18 +63,21 @@ class TaskDetails extends Component {
     }
 
 
-    deleteTask(id) {
+    deleteTask(id, emp) {
         Detailview.reload = true;
         axios.delete(url + 'ProjectTask?ID=' + id)
             .then(response => {
                 console.log('Aufgabe wurde erfolgreich gelöscht', response)
-                axios.delete(url + 'Employee?ProjectTaskID=' + id)
-                    .then(response => {
-                        console.log('Employee wurde erfolgreich gelöscht', response)
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    })
+                for (let e in emp) {
+                    console.log('delete employee - e', e[0])
+                    axios.delete(url + 'Employee?ID=' + e.ID)
+                        .then(response => {
+                            console.log('Employee wurde erfolgreich gelöscht', response)
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                }
             })
             .catch(error => {
                 console.log(error);
@@ -83,6 +86,9 @@ class TaskDetails extends Component {
 
 
     render() {
+        if (TaskDetails.reload) {
+            this.reload()
+        }
         return (
             <div>
                 <h1>{task.Title}</h1>
@@ -131,7 +137,7 @@ class TaskDetails extends Component {
                     pathname: '/newTask', state: {task: task}
                 }}>Bearbeiten</Link></button>
                 <button className="Button BackButton" type="delete"
-                        onClick={() => this.deleteTask(task.ID)}><Link
+                        onClick={() => this.deleteTask(task.ID, employees)}><Link
                     to={`/projects/${task.Project_ID}`}>Löschen</Link>
                 </button>
                 <Link to={`/projects/${task.Project_ID}`} className="Button BackButton"><i id="NewProject"
