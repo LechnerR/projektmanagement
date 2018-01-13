@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {
     Route,
     Link,
-    Switch
+    Switch,
+    Redirect
 } from 'react-router-dom';
 import {Grid, Row, Col} from 'react-bootstrap';
 import 'font-awesome/css/font-awesome.min.css';
@@ -24,12 +25,8 @@ import TaskDetails from '../project/TaskDetails.js';
 const Projects = () => {
     return (
         <Switch>
-          <Route path='/dashboard' component={Dashboard} />
+          <Route path='/projects' component={Dashboard} />
           <Route path='/projects/:id' component={Detailview} />
-          <Route path='/newProject' component={NewProject} />
-          <Route path='/newTask' component={NewTask} />
-          <Route path='/newEmployee' component={NewEmployee} />
-          <Route path='/taskDetails/:id' component={TaskDetails} />
         </Switch>
     )
 }
@@ -46,7 +43,10 @@ class Dashboard extends Component {
           projects: [],
           project: null,
           employees: [],
-          tasks: []
+          tasks: [],
+          newProject: false,
+          newTask: false,
+          newEmployee: false
         };
     }
 
@@ -68,11 +68,40 @@ class Dashboard extends Component {
       });
     }
 
+    goToNewProjectForm() {
+      this.setState({newProject: true});
+    }
+
+    goToNewTaskForm() {
+      this.setState({newTask: true});
+    }
+
+    goToNewEmployeeForm() {
+      this.setState({newEmployee: true});
+    }
+
     goBack() {
       this.setState({ project: null,
                       employees: [],
-                      tasks: []
+                      tasks: [],
+                      newProject: false,
+                      newTask: false
                     });
+    }
+
+    goBackToDetailview() {
+      this.setState({
+        newTask: false,
+        newProject: false
+      });
+    }
+
+    goBackToTaskDetailview() {
+      this.setState({
+        newTask: false,
+        newProject: false,
+        newEmployee: false
+      });
     }
 
     componentDidMount() {
@@ -85,12 +114,22 @@ class Dashboard extends Component {
         const oneProject = this.state.project;
         const employees = this.state.employees;
         const tasks = this.state.tasks;
-        console.log('Projekte: ', allProjects.length, allProjects, this.state.project);
-        console.log('Projekt: ', oneProject);
-        console.log('Mitarbeiter: ', employees, employees.length);
-        console.log('Tasks: ', tasks, tasks.length);
-        if (!oneProject) {
-          return (
+        const newProject = this.state.newProject;
+        const newTask = this.state.newTask;
+        const newEmployee = this.state.newEmployee;
+
+        let content;
+        if (oneProject && newEmployee) {
+          content = <NewEmployee heading="Neuen Mitarbeiter anlegen" onClick={this.goBackToTaskDetailview.bind(this)} />
+        } else if (oneProject && newTask) {
+          content = <NewTask heading="Neue Aufgabe" onClick={this.goBackToDetailview.bind(this)} />
+        } else if (newProject) {
+          content = <NewProject heading="Neues Projekt" onClick={this.goBack.bind(this)} />
+        } else if (oneProject) {
+          content = <Detailview project={oneProject.Items[0]} onClick={this.goBack.bind(this)} employees={employees} tasks={tasks} newTask={this.goToNewTaskForm.bind(this)}
+              newEmployee={this.goToNewEmployeeForm.bind(this)} />
+        } else {
+          content = (
             <div>
               <h2>Projektübersicht</h2>
                 <Grid>
@@ -101,23 +140,28 @@ class Dashboard extends Component {
                                     <div className="jumbotron">
                                         <h3>{proj.Title}</h3>
                                         <p>{proj.Description}</p>
-                                        <p><Link onClick={() => this.getOneProject(proj.ID)} className="Details" to={`/projects/${proj.ID}`}>Details</Link></p>
+                                        <p><button onClick={() => this.getOneProject(proj.ID)} className="Details">Details</button></p>
                                     </div>
                                 </Col>
                             ))
                         }
                     </Row>
                 </Grid>
-                <Link to="/newProject" className="Button NewProject"><i id="NewProject" className="fa fa-plus-circle"></i>neues
-                    Projekt</Link>
+                <button className="Button NewProject" onClick={() => this.goToNewProjectForm()}><i id="NewProject" className="fa fa-plus-circle"></i>neues Projekt</button>
             </div>
           );
-        } else {
-          return (
-            <Detailview project={oneProject.Items[0]} onClick={this.goBack.bind(this)} employees={employees} tasks={tasks} />
-          );
         }
+        // console.log('Projekte: ', allProjects.length, allProjects, this.state.project);
+        // console.log('Projekt: ', oneProject);
+        // console.log('Mitarbeiter: ', employees, employees.length);
+        // console.log('Tasks: ', tasks, tasks.length);
+        console.log('newProject: ', newProject);
+        console.log('newTask: ', newTask);
+        console.log('newEmployee: ', newEmployee);
 
+        return (
+          <div>{content}</div>
+        )
     }
 }
 

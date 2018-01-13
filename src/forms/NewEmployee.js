@@ -57,14 +57,14 @@ class NewEmployee extends Component {
             value: {
                 employeeName: this.state.value.employeeName,
                 employeeEmail: this.state.value.employeeEmail,
-                projectID: this.props.location.state.task.Project_ID,
-                taskID: this.props.location.state.task.ID
+                // projectID: this.props.location.state.task.Project_ID,
+                // taskID: this.props.location.state.task.ID
             }
         }
 
         return (
             <div>
-                <h2>Neues Teammitglied anlegen</h2>
+                <h2>{this.props.heading}</h2>
                 <form className="NewProjectForm">
                     <input className="Input" type="text" ref="name" placeholder="Name"
                            defaultValue={this.state.value.employeeName} onChange={this.handleName} required/><br/>
@@ -75,8 +75,7 @@ class NewEmployee extends Component {
                             this.saveValues();
                             this.createEmployee()
                         }}><Link to={`/projects/${this.state.value.projectID}`}>Speichern</Link></button>
-                        <button className="Button" type="reset"><Link
-                            to={`/projects/${this.state.value.projectID}`}>Abbrechen</Link></button>
+                      <button className="Button" type="reset" onClick={this.props.onClick}>Abbrechen</button>
                     </div>
                 </form>
             </div>

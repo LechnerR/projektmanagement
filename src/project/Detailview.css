@@ -16,3 +16,8 @@
   margin-top: 50px;
   float: right;
 }
+
+li .Link {
+  color: #48d1cc;
+  font-weight: bold;
+}

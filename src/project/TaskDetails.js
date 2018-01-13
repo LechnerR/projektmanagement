@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import 'font-awesome/css/font-awesome.min.css';
 import {Grid, Row, Col} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
-
+import { getEmployee } from '../Api.js';
 import './Detailview.css';
 import Detailview from "./Detailview";
 
@@ -21,6 +21,10 @@ class TaskDetails extends Component {
         super(props);
         // taskID = props.match.params.id
         this.deleteTask = this.deleteTask.bind(this);
+
+        this.state = {
+          employee: null
+        };
     }
 
     componentDidMount() {
@@ -62,6 +66,11 @@ class TaskDetails extends Component {
     //         });
     // }
 
+    getOneEmployee(id) {
+      getEmployee(id).then((employee) => {
+        this.setState({employee});
+      });
+    }
 
     deleteTask(id, emp) {
         Detailview.reload = true;
@@ -89,9 +98,15 @@ class TaskDetails extends Component {
         // if (TaskDetails.reload) {
         //     this.reload()
         // }
+        const employee = this.state.employee;
+        console.log('Employee: ', employee);
+
         return (
             <div>
                 <h1>{this.props.task.Title}</h1>
+                  {
+                    employee && <span>asdff</span>
+                  }
                 <Grid>
                     <Row className="show-grid">
                         <Col xs={6} md={4} className="ProjectDetails">
@@ -118,18 +133,15 @@ class TaskDetails extends Component {
                                 <ul className="List">
                               {
                                     (this.props.employees && this.props.employees.Count > 0) && this.props.employees.Items.map((e, index) => (
-                                        <li key={index}>
-                                            {e.Name} - {e.Email}
-                                        </li>
+                                      <li key={index}>
+                                        <a className="Link" href="#" onClick={() => this.getOneEmployee(e.ID)}>{e.Name} - {e.Email}</a>
+                                      </li>
                                     ))
                                 }
                                 </ul>
                                 <div className="Container">
-                                    <Link to={{
-                                        pathname: "/newEmployee",
-                                        state: {task: {Project_ID: this.props.task.Project_ID, ID: this.props.task.ID}}
-                                    }} className="Button"><i id="NewEmployee" className="fa fa-plus-circle"></i>neues
-                                        Teammitglied</Link>
+                                    <button className="Button" onClick={this.props.newEmployee}><i id="NewProject" className="fa fa-plus-circle"></i>neues
+                                        Teammitglied</button>
                                 </div>
                             </div>
                         </Col>
@@ -142,8 +154,10 @@ class TaskDetails extends Component {
                         onClick={() => this.deleteTask(this.props.task.ID, this.props.employees)}><Link
                     to={`/projects/${this.props.task.Project_ID}`}>Löschen</Link>
                 </button>
-                <button onClick={this.props.onClick} className="Button BackButton"><i id="NewProject"
-                                                                                           className="fa fa-caret-left"></i>Zurück</button>
+                <button onClick={this.props.onClick} className="Button BackButton">
+                  <i id="NewProject" className="fa fa-caret-left"></i>
+                  Zurück
+                </button>
             </div>
         )
     }

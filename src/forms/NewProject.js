@@ -69,47 +69,46 @@ class NewProject extends Component {
     render() {
 
         if (initUpdate) {
-            if (this.props.location.state) {
-                if (this.props.location.state.project) {
-                    updateProject = true;
-                    initUpdate = false;
-                    this.state = {
-                        value: {
-                            projectTitle: this.props.location.state.project.Title,
-                            projectDescription: this.props.location.state.project.Description,
-                            projectNotice: this.props.location.state.project.Notice,
-                            ID: this.props.location.state.project.ID
-                        }
-                    }
-                }
-            }
+            // if (this.props.location.state) {
+            //     if (this.props.location.state.project) {
+            //         updateProject = true;
+            //         initUpdate = false;
+            //         this.state = {
+            //             value: {
+            //                 projectTitle: this.props.location.state.project.Title,
+            //                 projectDescription: this.props.location.state.project.Description,
+            //                 projectNotice: this.props.location.state.project.Notice,
+            //                 ID: this.props.location.state.project.ID
+            //             }
+            //         }
+            //     }
+            // }
         }
 
-        let Heading = null;
-        if (this.props.location.state) {
-            Heading = <h2>Projekt ändern</h2>;
-        } else {
-            Heading = <h2>Neues Projekt anlegen</h2>;
-        }
+        // let Heading = null;
+        // if (this.props.location.state) {
+        //     Heading = <h2>Projekt ändern</h2>;
+        // } else {
+        //     Heading = <h2>Neues Projekt anlegen</h2>;
+        // }
 
         return (
             <div>
-                {Heading}
+                <h2>{this.props.heading}</h2>
                 <form className="NewProjectForm" onSubmit={this.handleNewProject.bind(this)}>
                     <input className="Input" type="text" ref="projectTitle" placeholder="Projekttitel"
-                           defaultValue={this.state.value.projectTitle} onChange={this.handleTitle} required/><br/>
+                           defaultValue={this.props.project.Title} onChange={this.handleTitle} required/><br/>
                     <textarea className="Input" type="text" ref="projectDescription" rows="15"
-                              placeholder="Projektbeschreibung" defaultValue={this.state.value.projectDescription}
+                              placeholder="Projektbeschreibung" defaultValue={this.props.project.Description}
                               onChange={this.handleDescription} required/><br/>
                     <textarea className="Input" type="text" ref="projectNotice" rows="10" placeholder="Projektnotizen"
-                              defaultValue={this.state.value.projectNotice} onChange={this.handleNotice}/><br/>
+                              defaultValue={this.props.project.Notice} onChange={this.handleNotice}/><br/>
                     <div className="Container">
                         <button className="Button" type="submit" onClick={() => {
                             this.saveValues();
                             this.createProject()
                         }}><Link to="/dashboard">Speichern</Link></button>
-                        <button className="Button" type="reset"><Link to={{pathname: '/dashboard'}}>Abbrechen</Link>
-                        </button>
+                      <button className="Button" type="reset" onClick={this.props.onClick}>Abbrechen</button>
                     </div>
                 </form>
             </div>

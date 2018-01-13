@@ -4,6 +4,7 @@ import {Grid, Row, Col} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import Dashboard from '../dashboard/Dashboard.js';
 import TaskDetails from './TaskDetails.js';
+import NewProject from '../forms/NewProject.js';
 import { getEmployeesPerTask, getTask } from '../Api.js';
 
 import './Detailview.css';
@@ -22,7 +23,8 @@ class Detailview extends Component {
         // this.deleteProject = this.deleteProject.bind(this);
         this.state = {
           task: null,
-          employees: []
+          employees: [],
+          edit: false
         };
     }
 
@@ -73,6 +75,12 @@ class Detailview extends Component {
                     });
     }
 
+    goBackToDetailview() {
+      this.setState({
+        edit: false
+      });
+    }
+
     getOneTask(id) {
       getTask(id).then((task) => {
         this.setState({task});
@@ -82,6 +90,11 @@ class Detailview extends Component {
       });
     }
 
+    goToNewProjectForm() {
+      this.setState({
+        edit: true
+      });
+    }
     // deleteProject(id) {
     //     Dashboard.reload = true;
     //     axios.delete(url + 'Project?ID=' + id)
@@ -100,96 +113,101 @@ class Detailview extends Component {
 
         const oneTask = this.state.task;
         const employees = this.state.employees;
-        console.log('Task: ', oneTask);
-        console.log('Mitarbeiter: ', employees);
-        console.log('alle Mitarbeiter: ', this.props.employees);
+        const edit = this.state.edit;
+        console.log('edit: ', edit);
+        // console.log('Task: ', oneTask);
+        // console.log('Mitarbeiter: ', employees);
+        // console.log('alle Mitarbeiter: ', this.props.employees);
 
-        if (!oneTask) {
-          return (
-              <div>
-                  <h1>{this.props.project.Title}</h1>
-                  <Grid>
-                      <Row className="show-grid">
-                          <Col xs={6} md={4} className="ProjectDetails">
-                              <div className="jumbotron">
-                                  <h3>Beschreibung</h3>
-                                  <p>{this.props.project.Description}</p>
-                              </div>
-                          </Col>
-                          <Col xs={6} md={4} className="ProjectDetails">
-                              <div className="jumbotron">
-                                  <h3>Notizen</h3>
-                                  <p>{this.props.project.Notice}</p>
-                              </div>
-                          </Col>
-                          <Col xs={6} md={4} className="ProjectDetails">
-                              <div className="jumbotron">
-                                  <h3>Termine</h3>
-                                  <ul className="List">
-                                  {
-                                      this.props.tasks.Count > 0 && this.props.tasks.Items.map((t, index) => (
-                                            <li key={index}>
-                                              <Link onClick={() => this.getOneTask(t.ID)} to={`/TaskDetails/${t.ID}`}>{t.Title} {t.Description}
-                                                  - {t.Deadline}</Link>
-                                            </li>
-                                      ))
-                                  }
-                                  </ul>
-                              </div>
-                          </Col>
-                          <Col xs={6} md={4} className="ProjectDetails">
-                              <div className="jumbotron">
-                                  <h3>Aufgaben</h3>
-                                  <ul className="List">
-                                  {
-                                      this.props.tasks.Count > 0 && this.props.tasks.Items.map((t, index) => (
-                                          <li key={index}>
-                                              <Link onClick={() => this.getOneTask(t.ID)} to={`/TaskDetails/${t.ID}`}>{t.Title}</Link>
-                                          </li>
-
-                                      ))
-                                  }
-                                  </ul>
-                                  <div className="Container">
-                                      <Link
-                                          to={{pathname: '/newTask', state: {task: {Project_ID: this.props.project.ID}}}}
-                                          className="Button"><i id="NewProject"
-                                                                className="fa fa-plus-circle"></i>neue
-                                          Aufgabe</Link>
-                                  </div>
-                              </div>
-                          </Col>
-                          <Col xs={6} md={4} className="ProjectDetails">
-                              <div className="jumbotron">
-                                  <h3>Team</h3>
-                                    <ul className="List">
-                                  {
-                                      (this.props.employees.Count > 0) && this.props.employees.Items.map((e, index) => (
-                                          <li key={index}>
-                                              {e.Name} - {e.Email}
-                                          </li>
-                                      ))
-                                  }
-                                  </ul>
-                              </div>
-                          </Col>
-                      </Row>
-                  </Grid>
-                  <button className="Button BackButton" type="update"><Link to={{
-                      pathname: '/newProject', state: {project: this.props.project}
-                  }}>Bearbeiten</Link></button>
-                  <Link to="/dashboard"><button className="Button BackButton" type="delete"
-                          onClick={() => this.deleteProject(this.props.project.ID)}>Löschen
-                  </button></Link>
-                  <button className="Button BackButton" onClick={this.props.onClick}><i id="NewProject" className="fa fa-caret-left"></i>Zurück</button>
-              </div>
-          )
+        let content;
+        if (oneTask) {
+          content = <TaskDetails employees={employees} task={oneTask.Items[0]} onClick={this.goBack.bind(this)} newEmployee={this.props.newEmployee} />
+        } else if (edit) {
+          content = <NewProject heading="Projekt bearbeiten" project={this.props.project} onClick={this.goBackToDetailview.bind(this)}/>
         } else {
-          return (
-            <TaskDetails employees={employees} task={oneTask.Items[0]} onClick={this.goBack.bind(this)} />
-          );
+          content =
+            <div>
+              <h1>{this.props.project.Title}</h1>
+              <Grid>
+                  <Row className="show-grid">
+                      <Col xs={6} md={4} className="ProjectDetails">
+                          <div className="jumbotron">
+                              <h3>Beschreibung</h3>
+                              <p>{this.props.project.Description}</p>
+                          </div>
+                      </Col>
+                      <Col xs={6} md={4} className="ProjectDetails">
+                          <div className="jumbotron">
+                              <h3>Notizen</h3>
+                              <p>{this.props.project.Notice}</p>
+                          </div>
+                      </Col>
+                      <Col xs={6} md={4} className="ProjectDetails">
+                          <div className="jumbotron">
+                              <h3>Termine</h3>
+                              <ul className="List">
+                              {
+                                  this.props.tasks.Count > 0 && this.props.tasks.Items.map((t, index) => (
+                                        <li key={index}>
+                                          <a className="Link" href="#" onClick={() => this.getOneTask(t.ID)}>{t.Title} {t.Description} - {t.Deadline}</a>
+                                        </li>
+                                  ))
+                              }
+                              </ul>
+                          </div>
+                      </Col>
+                      <Col xs={6} md={4} className="ProjectDetails">
+                          <div className="jumbotron">
+                              <h3>Aufgaben</h3>
+                              <ul className="List">
+                              {
+                                  this.props.tasks.Count > 0 && this.props.tasks.Items.map((t, index) => (
+                                      <li key={index}>
+                                          <a className="Link" href="#" onClick={() => this.getOneTask(t.ID)}>{t.Title}</a>
+                                      </li>
+
+                                  ))
+                              }
+                              </ul>
+                              <div className="Container">
+                                  <button className="Button" onClick={this.props.newTask}><i id="NewProject"
+                                                            className="fa fa-plus-circle"></i>neue Aufgabe</button>
+                              </div>
+                          </div>
+                      </Col>
+                      <Col xs={6} md={4} className="ProjectDetails">
+                          <div className="jumbotron">
+                              <h3>Team</h3>
+                                <ul className="List">
+                              {
+                                  (this.props.employees.Count > 0) && this.props.employees.Items.map((e, index) => (
+                                      <li key={index}>
+                                          {e.Name} - {e.Email}
+                                      </li>
+                                  ))
+                              }
+                              </ul>
+                          </div>
+                      </Col>
+                  </Row>
+              </Grid>
+              <button className="Button BackButton" type="update" onClick={this.goToNewProjectForm.bind(this)}>
+                {/*<Link to={{
+                  pathname: '/newProject', state: {project: this.props.project}
+                  }}>Bearbeiten
+                </Link>*/}
+                Bearbeiten
+              </button>
+              <Link to="/dashboard"><button className="Button BackButton" type="delete"
+                      onClick={() => this.deleteProject(this.props.project.ID)}>Löschen
+              </button></Link>
+              <button className="Button BackButton" onClick={this.props.onClick}><i id="NewProject" className="fa fa-caret-left"></i>Zurück</button>
+          </div>
         }
 
+        return (
+          <div>{content}</div>
+        );
 
     }
 }

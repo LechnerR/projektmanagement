@@ -30,14 +30,10 @@ const Root = () => {
     <BrowserRouter>
       <div>
         <Switch>
-          <Route path='/' component={App}/>
+          <Route exact path='/' component={App}/>
           // just for testing
-          <Route exact path='/dashboard' component={Dashboard}/>
-          <Route exact path='/projects/:id' component={Detailview}/>
-            {/*<Route path='/newProject' component={NewProject} />
-          <Route path='/newTask' component={NewTask} />
-          <Route path='/newEmployee' component={NewEmployee} />
-          <Route path='/taskDetails/:id' component={TaskDetails} />*/}
+          <Route path='/dashboard' component={Dashboard}/>
+          <Route path='/projects/:id' component={Detailview}/>
         </Switch>
       </div>
     </BrowserRouter>

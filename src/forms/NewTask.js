@@ -22,7 +22,7 @@ class NewTask extends Component {
                 taskNotice: '',
                 taskDeadline: '',
                 taskMilestone: false,
-                projectID: this.props.location.state.task.Project_ID
+                // projectID: this.props.location.state.task.Project_ID
             }
         };
 
@@ -107,35 +107,35 @@ class NewTask extends Component {
     render() {
 
         if (initUpdate) {
-            if (this.props.location.state) {
-                if (this.props.location.state.task.ID) {
-                    updateTask = true;
-                    initUpdate = false;
-                    this.state = {
-                        value: {
-                            taskTitle: this.props.location.state.task.Title,
-                            taskDescription: this.props.location.state.task.Description,
-                            taskNotice: this.props.location.state.task.Notice,
-                            taskDeadline: this.props.location.state.task.Deadline,
-                            taskMilestone: this.props.location.state.task.Milestone,
-                            projectID: this.props.location.state.task.Project_ID,
-                            ID: this.props.location.state.task.ID
-                        }
-                    }
-                }
-            }
+            // if (this.props.location.state) {
+            //     if (this.props.location.state.task.ID) {
+            //         updateTask = true;
+            //         initUpdate = false;
+            //         this.state = {
+            //             value: {
+            //                 taskTitle: this.props.location.state.task.Title,
+            //                 taskDescription: this.props.location.state.task.Description,
+            //                 taskNotice: this.props.location.state.task.Notice,
+            //                 taskDeadline: this.props.location.state.task.Deadline,
+            //                 taskMilestone: this.props.location.state.task.Milestone,
+            //                 projectID: this.props.location.state.task.Project_ID,
+            //                 ID: this.props.location.state.task.ID
+            //             }
+            //         }
+            //     }
+            // }
         }
 
-        let Heading = null;
-        if (this.props.location.state.task.Title) {
-            Heading = <h2>Aufgabe ändern</h2>;
-        } else {
-            Heading = <h2>Neue Aufgabe anlegen</h2>;
-        }
+        // let Heading = null;
+        // if (this.props.location.state.task.Title) {
+        //     Heading = <h2>Aufgabe ändern</h2>;
+        // } else {
+        //     Heading = <h2>Neue Aufgabe anlegen</h2>;
+        // }
 
         return (
             <div>
-                {Heading}
+                <h2>{this.props.heading}</h2>
                 <form className="NewProjectForm">
                     <input className="Input" type="text" ref="taskTitle" placeholder="Aufgabentitel"
                            defaultValue={this.state.value.taskTitle} onChange={this.handleTitle} required/><br/>
@@ -161,8 +161,7 @@ class NewTask extends Component {
                             this.saveValues();
                             this.createTask()
                         }}><Link to={`/projects/${this.state.value.projectID}`}>Speichern</Link></button>
-                        <button className="Button" type="reset"><Link
-                            to={`/projects/${this.state.value.projectID}`}>Abbrechen</Link></button>
+                      <button className="Button" type="reset" onClick={this.props.onClick}>Abbrechen</button>
                     </div>
                 </form>
             </div>
