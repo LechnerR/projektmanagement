@@ -144,7 +144,7 @@ class Detailview extends Component {
                                   {
                                       this.props.tasks.Count > 0 && this.props.tasks.Items.map((t, index) => (
                                           <li key={index}>
-                                              <Link to={`/TaskDetails/${t.ID}`}>{t.Title}</Link>
+                                              <Link onClick={() => this.getOneTask(t.ID)} to={`/TaskDetails/${t.ID}`}>{t.Title}</Link>
                                           </li>
 
                                       ))
