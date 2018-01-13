@@ -1,14 +1,9 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import Dashboard from '../dashboard/Dashboard.js';
-
 import './Forms.css';
+import { updateProject } from '../Api.js';
 
-var axios = require('axios')
-const url = 'https://b0qco5h7cj.execute-api.eu-central-1.amazonaws.com/pm/'
-var createProject = {};
-var updateProject = false;
-var initUpdate = true;
 
 class NewProject extends Component {
 
@@ -16,98 +11,72 @@ class NewProject extends Component {
         console.log('NewProject constructor - props', props);
         super(props);
         this.state = {
-            value: {
-                projectTitle: '',
-                projectDescription: '',
-                projectNotice: ''
-            }
+            project: {
+                Description: '',
+                ID: -1,
+                Notice: '',
+                Title: ''
+            },
+            create: false
         };
 
-        this.handleTitle = this.handleTitle.bind(this);
-        this.handleDescription = this.handleDescription.bind(this);
-        this.handleNotice = this.handleNotice.bind(this);
     }
 
 
     handleNewProject(e) {
         e.preventDefault();
-    }
 
-    handleTitle(event) {
-        this.setState({
-            value: {
-                projectTitle: event.target.value,
-                projectDescription: this.state.value.projectDescription,
-                projectNotice: this.state.value.projectNotice,
-                ID: this.state.value.ID
+        let project = this.props.project;
+        if (project) {
+          this.setState({
+            project: {
+              Title: this.refs.projectTitle.value,
+              Description: this.refs.projectDescription.value,
+              Notice: this.refs.projectNotice.value,
+              ID: this.props.project.ID
             }
-        });
-    }
-
-    handleDescription(event) {
-        this.setState({
-            value: {
-                projectTitle: this.state.value.projectTitle,
-                projectDescription: event.target.value,
-                projectNotice: this.state.value.projectNotice,
-                ID: this.state.value.ID
+          }, function () {
+            // console.log('Projekt updaten: ', this.state.project);
+            updateProject(this.state.project);
+            this.props.onClick();
+          });
+        } else {
+          this.setState({
+            project: {
+              Title: this.refs.projectTitle.value,
+              Description: this.refs.projectDescription.value,
+              Notice: this.refs.projectNotice.value,
+              ID: new Date().valueOf()
             }
-        });
-    }
-
-    handleNotice(event) {
-        this.setState({
-            value: {
-                projectTitle: this.state.value.projectTitle,
-                projectDescription: this.state.value.projectDescription,
-                projectNotice: event.target.value,
-                ID: this.state.value.ID
-            }
-        });
+          }, function () {
+            // console.log('neues Projekt: ', this.state.project);
+            updateProject(this.state.project);
+            this.props.onClick();
+          });
+        }
     }
 
     render() {
 
-        if (initUpdate) {
-            // if (this.props.location.state) {
-            //     if (this.props.location.state.project) {
-            //         updateProject = true;
-            //         initUpdate = false;
-            //         this.state = {
-            //             value: {
-            //                 projectTitle: this.props.location.state.project.Title,
-            //                 projectDescription: this.props.location.state.project.Description,
-            //                 projectNotice: this.props.location.state.project.Notice,
-            //                 ID: this.props.location.state.project.ID
-            //             }
-            //         }
-            //     }
-            // }
+        let project = this.props.project;
+        if (!project) {
+          project = this.state.project;
         }
-
-        // let Heading = null;
-        // if (this.props.location.state) {
-        //     Heading = <h2>Projekt ändern</h2>;
-        // } else {
-        //     Heading = <h2>Neues Projekt anlegen</h2>;
-        // }
+        // console.log("Projekt: ", this.state.project);
 
         return (
             <div>
                 <h2>{this.props.heading}</h2>
                 <form className="NewProjectForm" onSubmit={this.handleNewProject.bind(this)}>
                     <input className="Input" type="text" ref="projectTitle" placeholder="Projekttitel"
-                           defaultValue={this.props.project.Title} onChange={this.handleTitle} required/><br/>
+                           defaultValue={project.Title} required/><br/>
                     <textarea className="Input" type="text" ref="projectDescription" rows="15"
-                              placeholder="Projektbeschreibung" defaultValue={this.props.project.Description}
-                              onChange={this.handleDescription} required/><br/>
+                              placeholder="Projektbeschreibung" defaultValue={project.Description}
+                             required/><br/>
                     <textarea className="Input" type="text" ref="projectNotice" rows="10" placeholder="Projektnotizen"
-                              defaultValue={this.props.project.Notice} onChange={this.handleNotice}/><br/>
+                              defaultValue={project.Notice} /><br/>
                     <div className="Container">
-                        <button className="Button" type="submit" onClick={() => {
-                            this.saveValues();
-                            this.createProject()
-                        }}><Link to="/dashboard">Speichern</Link></button>
+                        <button className="Button" type="submit">Speichern</button>
                       <button className="Button" type="reset" onClick={this.props.onClick}>Abbrechen</button>
                     </div>
                 </form>
@@ -115,40 +84,6 @@ class NewProject extends Component {
         )
     }
 
-    saveValues() {
-        if (updateProject) {
-            createProject = {
-                Title: this.state.value.projectTitle,
-                Description: this.state.value.projectDescription,
-                Notice: this.state.value.projectNotice,
-                ID: this.state.value.ID
-            }
-        } else {
-            createProject = {
-                Title: this.state.value.projectTitle,
-                Description: this.state.value.projectDescription,
-                Notice: this.state.value.projectNotice,
-                ID: new Date().valueOf()
-            }
-        }
-
-
-    }
-
-    createProject() {
-        if (updateProject) {
-            updateProject = false;
-            initUpdate = true;
-        }
-        Dashboard.reload = true;
-        axios.post(url + 'Project', createProject)
-            .then(response => {
-                console.log('Projekt erfolgreich erstellt', response)
-            })
-            .catch(error => {
-                console.log(error)
-            });
-    }
 }
 
 export default NewProject;

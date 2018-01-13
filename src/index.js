@@ -32,8 +32,8 @@ const Root = () => {
         <Switch>
           <Route exact path='/' component={App}/>
           // just for testing
-          <Route path='/dashboard' component={Dashboard}/>
-          <Route path='/projects/:id' component={Detailview}/>
+          {/*<Route path='/dashboard' component={Dashboard}/>
+        <Route path='/projects/:id' component={Detailview}/>*/}
         </Switch>
       </div>
     </BrowserRouter>

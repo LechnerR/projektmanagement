@@ -4,49 +4,36 @@ import {Grid, Row, Col} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import Dashboard from '../dashboard/Dashboard.js';
 import TaskDetails from './TaskDetails.js';
+import NewEmployee from '../forms/NewEmployee.js';
 import NewProject from '../forms/NewProject.js';
-import { getEmployeesPerTask, getTask } from '../Api.js';
+import { getEmployeesPerTask, getTask, getProject, deleteProject, getTasksPerProject, deleteTask, deleteEmployee, getEmployeesPerProject } from '../Api.js';
 
 import './Detailview.css';
 
-// var axios = require('axios')
-// const url = 'https://b0qco5h7cj.execute-api.eu-central-1.amazonaws.com/pm/'
-//
-// var tasks = [];
-// var employees = [];
 
 class Detailview extends Component {
     static reload = false;
 
     constructor(props) {
         super(props);
-        // this.deleteProject = this.deleteProject.bind(this);
+        this.deleteProject = this.deleteProject.bind(this);
         this.state = {
+          tasks: [],
           task: null,
           employees: [],
-          edit: false
+          edit: false,
+          project: null,
+          newEmployee: false
         };
     }
 
 
     componentDidMount() {
-        // var self = this;
-        // axios.get(url + 'ProjectTask?ProjectID=' + self.props.project.ID)
-        //     .then(function (response) {
-        //         tasks = response.data.Items;
-        //         axios.get(url + 'Employee?ProjectID=' + self.props.project.ID)
-        //             .then(function (response) {
-        //                 employees = response.data.Items;
-        //                 self.forceUpdate();
-        //             })
-        //             .catch(function (error) {
-        //                 console.log(error);
-        //             });
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //     });
-        // this.getOneProject(this.props.project.id);
+
+        this.getThisProject(this.props.project.ID);
+        this.getTasksPerProject(this.props.project.ID);
+        this.getEmployeesPerProject(this.props.project.ID);
+        // console.log(this.props.project.ID);
     }
 
     // reload() {
@@ -70,14 +57,35 @@ class Detailview extends Component {
     // }
 
     goBack() {
-      this.setState({ task: null,
-                      employees: []
-                    });
+      this.setState({
+          tasks: [],
+          employees: [],
+          edit: false,
+          project: null,
+          newEmployee: false
+      });
     }
 
     goBackToDetailview() {
       this.setState({
         edit: false
+      });
+    }
+
+    getEmployeesPerProject(id) {
+      getEmployeesPerProject(id).then((employees) => {
+        this.setState({employees});
+      });
+    }
+    getTasksPerProject(id) {
+      getTasksPerProject(id).then((tasks) => {
+        this.setState({tasks});
+      });
+    }
+
+    getThisProject(id) {
+      getProject(id).then((project) => {
+        this.setState({project});
       });
     }
 
@@ -95,16 +103,44 @@ class Detailview extends Component {
         edit: true
       });
     }
-    // deleteProject(id) {
-    //     Dashboard.reload = true;
-    //     axios.delete(url + 'Project?ID=' + id)
-    //         .then(response => {
-    //             console.log('Projekt wurde erfolgreich gelöscht', response)
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //         })
-    // }
+
+    goToNewEmployeeForm() {
+      this.setState({newEmployee: true});
+    }
+
+    goBackToTaskDetailview() {
+      this.setState({newEmployee: false});
+    }
+
+    deleteProject(id) {
+      getTasksPerProject(id).then(function (response) {
+        if (response.Count > 0) {
+          for (let i = 0; i < response.Count; i++) {
+            deleteTask(response.Items[i].ID);
+            // console.log('tasks of project:', response.Items[i].ID);
+          }
+        }
+        console.log(response);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+      getEmployeesPerProject(id).then(function (response) {
+        if (response.Count > 0) {
+          for (let i = 0; i < response.Count; i++) {
+            deleteTask(response.Items[i].ID);
+            // console.log('tasks of project:', response.Items[i].ID);
+          }
+        }
+        console.log(response);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+
+      deleteProject(id);
+      this.props.onClick();
+    }
 
     render() {
         // if (Detailview.reload) {
@@ -114,14 +150,17 @@ class Detailview extends Component {
         const oneTask = this.state.task;
         const employees = this.state.employees;
         const edit = this.state.edit;
-        console.log('edit: ', edit);
+        const newEmployee = this.state.newEmployee;
+        // console.log('newEmp: ', newEmployee);
         // console.log('Task: ', oneTask);
         // console.log('Mitarbeiter: ', employees);
         // console.log('alle Mitarbeiter: ', this.props.employees);
 
         let content;
-        if (oneTask) {
-          content = <TaskDetails employees={employees} task={oneTask.Items[0]} onClick={this.goBack.bind(this)} newEmployee={this.props.newEmployee} />
+        if (oneTask && newEmployee) {
+          content = <NewEmployee heading="Neuen Mitarbeiter anlegen" task={oneTask} onClick={this.goBackToTaskDetailview.bind(this)} />
+        } else if (oneTask) {
+          content = <TaskDetails employees={employees} task={oneTask.Items[0]} onClick={this.goBack.bind(this)} newEmployee={this.goToNewEmployeeForm.bind(this)} />
         } else if (edit) {
           content = <NewProject heading="Projekt bearbeiten" project={this.props.project} onClick={this.goBackToDetailview.bind(this)}/>
         } else {
@@ -192,15 +231,11 @@ class Detailview extends Component {
                   </Row>
               </Grid>
               <button className="Button BackButton" type="update" onClick={this.goToNewProjectForm.bind(this)}>
-                {/*<Link to={{
-                  pathname: '/newProject', state: {project: this.props.project}
-                  }}>Bearbeiten
-                </Link>*/}
                 Bearbeiten
               </button>
-              <Link to="/dashboard"><button className="Button BackButton" type="delete"
+              <button className="Button BackButton" type="delete"
                       onClick={() => this.deleteProject(this.props.project.ID)}>Löschen
-              </button></Link>
+              </button>
               <button className="Button BackButton" onClick={this.props.onClick}><i id="NewProject" className="fa fa-caret-left"></i>Zurück</button>
           </div>
         }

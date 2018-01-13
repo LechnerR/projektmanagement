@@ -3,107 +3,95 @@ import {Link} from 'react-router-dom';
 import './Forms.css';
 import Detailview from "../project/Detailview";
 import TaskDetails from "../project/TaskDetails";
+import { updateEmployee, deleteEmployee } from '../Api.js';
 
-
-var axios = require('axios')
-const url = 'https://b0qco5h7cj.execute-api.eu-central-1.amazonaws.com/pm/'
-var createEmployee = {};
-var updateEmployee = false;
-var initUpdate = true;
 
 class NewEmployee extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            value: {
-                employeeName: '',
-                employeeEmail: '',
+            employee: {
+                Name: '',
+                Email: '',
                 taskID: '',
                 projectID: ''
             }
         };
-
-        this.handleName = this.handleName.bind(this);
-        this.handleEmail = this.handleEmail.bind(this);
-
+        this.deleteEmployee = this.deleteEmployee.bind(this);
     }
 
-    handleName(event) {
-        this.setState({
-            value: {
-                employeeName: event.target.value,
-                employeeEmail: this.state.value.employeeEmail,
-                taskID: this.state.value.taskID,
-                projectID: this.state.value.projectID
+    handleNewEmployee(e) {
+        e.preventDefault();
+
+        let employee = this.props.employee;
+        if (employee) {
+          this.setState({
+            employee: {
+              Name: this.refs.name.value,
+              Email: this.refs.email.value,
+              TaskID: this.props.employee.TaskID,
+              ProjectID: this.props.employee.ProjectID,
+              ID: this.props.employee.ID
             }
-        });
+          }, function () {
+            // console.log('MA updaten: ', this.state.employee);
+            updateEmployee(this.state.employee);
+            this.props.onClick();
+          });
+        } else {
+          this.setState({
+            employee: {
+              Name: this.refs.name.value,
+              Email: this.refs.email.value,
+              TaskID: this.props.task.Items[0].ID,
+              ProjectID: this.props.task.Items[0].Project_ID,
+              ID: new Date().valueOf()
+            }
+          }, function () {
+            // console.log('neuer MA: ', this.state.employee);
+            updateEmployee(this.state.employee);
+            this.props.onClick();
+          });
+        }
     }
 
-    handleEmail(event) {
-        this.setState({
-            value: {
-                employeeName: this.state.value.employeeName,
-                employeeEmail: event.target.value,
-                taskID: this.state.value.taskID,
-                projectID: this.state.value.projectID
-            }
-        });
+    deleteEmployee(id) {
+      deleteEmployee(id);
+      this.props.onClick();
     }
 
     render() {
-
-        this.state = {
-            value: {
-                employeeName: this.state.value.employeeName,
-                employeeEmail: this.state.value.employeeEmail,
-                // projectID: this.props.location.state.task.Project_ID,
-                // taskID: this.props.location.state.task.ID
-            }
-        }
+      let employee = this.props.employee;
+      if (!employee) {
+        employee = this.state.employee;
+      }
+      // console.log("employee: ", this.state.employee);
 
         return (
             <div>
                 <h2>{this.props.heading}</h2>
-                <form className="NewProjectForm">
+                <form className="NewProjectForm" onSubmit={this.handleNewEmployee.bind(this)}>
                     <input className="Input" type="text" ref="name" placeholder="Name"
-                           defaultValue={this.state.value.employeeName} onChange={this.handleName} required/><br/>
+                           defaultValue={employee.Name} required/><br/>
                     <input className="Input" type="email" ref="email" placeholder="E-Mail"
-                           defaultValue={this.state.value.employeeEmail} onChange={this.handleEmail} required/><br/>
+                           defaultValue={employee.Email} required/><br/>
                     <div className="Container">
-                        <button className="Button" type="submit" onClick={() => {
-                            this.saveValues();
-                            this.createEmployee()
-                        }}><Link to={`/projects/${this.state.value.projectID}`}>Speichern</Link></button>
+                      <button className="Button" type="submit">Speichern</button>
                       <button className="Button" type="reset" onClick={this.props.onClick}>Abbrechen</button>
+                      {
+                          this.props.employee &&
+                          <button className="Button" type="delete"
+                                  onClick={() => this.deleteEmployee(employee.ID)}>Löschen
+                          </button>
+                      }
+
                     </div>
                 </form>
             </div>
         )
     }
 
-    saveValues() {
-        console.log('NewEmployee - saveValues - this.state.value', this.state.value);
-        createEmployee = {
-            Name: this.state.value.employeeName,
-            Email: this.state.value.employeeEmail,
-            ProjectID: this.state.value.projectID,
-            TaskID: this.state.value.taskID,
-            ID: new Date().valueOf()
-        }
-    }
-
-    createEmployee() {
-        Detailview.reload = true;
-        TaskDetails.reload = true;
-        axios.post(url + 'Employee', createEmployee)
-            .then(response => {
-                console.log('Mitarbeiter erfolgreich erstellt', response)
-            })
-            .catch(error => {
-                console.log(error)
-            });
-    }
 }
 
 export default NewEmployee;
