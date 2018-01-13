@@ -47,7 +47,6 @@ class App extends Component {
             (this.state.user) ?
             // if user show dashboard
             <div>
-              <Redirect to="/dashboard" />
             <Dashboard />
             </div>
 
